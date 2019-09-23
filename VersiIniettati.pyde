@@ -11,11 +11,13 @@ def setup():
     global frog
     size(LarghezzaImg,AltezzaImg)
     frog=loadImage("frog2.jpg")
+
     disegna()
     #noLoop()
 
 
 def disegna():
+    
     input = createInput("Paradiso_1-12"); #Apro il file con il testo da iniettare
 
     loadPixels()
@@ -33,7 +35,11 @@ def disegna():
     carattereCorrente=1
     #Contatore carattere da iniettare
     pixelCorrente=0
+    
+    # PosizioneBit da alterare nella componente rossa
+    posBit=1
 
+    
     while (data != -1 and pixelCorrente<(width*height)):
         #Estraggo le componenti RGB
         r=red(frog.pixels[pixelCorrente])
@@ -46,12 +52,12 @@ def disegna():
         #trasformo in binario, la Codifica ASCII è negli 8 bit più significativi:
         binario=binary(data,16)
 
-        if (binario[bit]=="0" and (r%2)==1):
+        if (binario[bit]=="0" and (r%(2**posBit))==1):
             #bit da esaminare zero e  componente rossa dispari -> decremento la componente
-            r=r-1
-        elif (binario[bit]=="1" and (r%2)==0):
+            r=r-2**(posBit-1)
+        elif (binario[bit]=="1" and (r%(2**posBit))==0):
             #bit da esaminare uno e la componente rossa pari -> incremento la componente
-            r=r+1
+            r=r+2**(posBit-1)
 
         #scorro i bit
         bit=bit-1
